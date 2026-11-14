@@ -11,9 +11,11 @@ import {
   Radio,
   FileText,
   Settings,
+  LayoutDashboard,
 } from 'lucide-react';
 
 export type PageId =
+  | 'live-dashboard'
   | 'crew-overview'
   | 'astronaut-profile'
   | 'vitals'
@@ -39,6 +41,7 @@ interface NavItem {
 
 export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate }) => {
   const navItems: NavItem[] = [
+    { id: 'live-dashboard', label: 'Live Dashboard', icon: <LayoutDashboard className="w-3.5 h-3.5" /> },
     { id: 'crew-overview', label: 'Crew Overview', icon: <Users className="w-3.5 h-3.5" /> },
     { id: 'astronaut-profile', label: 'Profile', icon: <User className="w-3.5 h-3.5" /> },
     { id: 'vitals', label: 'Vitals', icon: <Activity className="w-3.5 h-3.5" /> },

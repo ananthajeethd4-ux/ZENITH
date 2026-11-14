@@ -8,6 +8,7 @@ import { Footer } from './components/layout/Footer';
 import { DisclaimerBanner } from './components/common/DisclaimerBanner';
 
 // Pages
+import { DashboardPage } from './pages/DashboardPage';
 import { CrewOverviewPage } from './pages/CrewOverviewPage';
 import { AstronautProfilePage } from './pages/AstronautProfilePage';
 import { VitalsPage } from './pages/VitalsPage';
@@ -34,6 +35,7 @@ const MainLayout: React.FC = () => {
 
   // Determine whether to display the Astronaut selector sub-header
   const isAstronautSpecificPage = [
+    'live-dashboard',
     'astronaut-profile',
     'vitals',
     'sleep',
@@ -60,6 +62,7 @@ const MainLayout: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+        {currentPage === 'live-dashboard' && <DashboardPage />}
         {currentPage === 'crew-overview' && (
           <CrewOverviewPage onNavigate={handleNavigate} />
         )}
