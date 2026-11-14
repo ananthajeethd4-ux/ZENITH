@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-paper: #F9F8F6;
+    --surface-ivory: #F1EFEB;
+    --primary-slate: #34465A;
+    --text-charcoal: #1A1A1A;
+    --text-slate: #5F6670;
+    --border-gray: #DAD7D1;
+    --alert-brick: #A34A3E;
+  }
+
+  body {
+    background-color: var(--bg-paper);
+    color: var(--text-charcoal);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  /* Accessible focus indicators using archival slate */
+  :focus-visible {
+    outline: 2px solid #34465A;
+    outline-offset: 2px;
+  }
+}
+
+/* Tactile paper card styling */
+.paper-surface {
+  background-color: #F1EFEB;
+  border: 1px solid #DAD7D1;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03);
+}
+
+.paper-surface-subtle {
+  background-color: #F9F8F6;
+  border: 1px solid #DAD7D1;
+}
+
+.paper-surface-elevated {
+  background-color: #FFFFFF;
+  border: 1px solid #DAD7D1;
+  box-shadow: 0 2px 4px rgba(26, 26, 26, 0.05);
+}
+
+/* Monospace telemetry readout */
+.telemetry-val {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Print styling for flight medical reports */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .paper-surface, .paper-surface-subtle, .paper-surface-elevated {
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+}
+
