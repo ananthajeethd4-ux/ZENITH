@@ -192,5 +192,24 @@ export function generateTelemetryPacket(
     vitals,
     posture: pick(profile.postures),
     sync_status: 'pending',
+    waveforms: generateMockWaveforms(vitals.heart_rate, timestamp),
   };
+}
+
+/** Demonstration signals only; these are not sensor measurements. */
+function generateMockWaveforms(heartRate: number, timestamp: Date): NonNullable<TelemetryLog['waveforms']> {
+  const sampleRate = 64;
+  const start = timestamp.getTime() / 1000;
+  const eeg: number[] = [];
+  const ecg: number[] = [];
+  const gaussian = (x: number, centre: number, width: number) =>
+    Math.exp(-(((x - centre) / width) ** 2));
+  for (let i = 0; i < sampleRate * 2; i++) {
+    const t = start + i / sampleRate;
+    eeg.push(Number((18 * Math.sin(2 * Math.PI * 10 * t) + 7 * Math.sin(2 * Math.PI * 6 * t) + (Math.random() - 0.5) * 5).toFixed(2)));
+    const phase = ((t * heartRate / 60) % 1 + 1) % 1;
+    const value = 0.12 * gaussian(phase, 0.18, 0.055) - 0.15 * gaussian(phase, 0.36, 0.018) + 1.0 * gaussian(phase, 0.40, 0.018) - 0.25 * gaussian(phase, 0.44, 0.02) + 0.3 * gaussian(phase, 0.68, 0.10);
+    ecg.push(Number((value + (Math.random() - 0.5) * 0.025).toFixed(3)));
+  }
+  return { source: 'simulated', sample_rate_hz: sampleRate, eeg_microvolts: eeg, ecg_millivolts: ecg };
 }
