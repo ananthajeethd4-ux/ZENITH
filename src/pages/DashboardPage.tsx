@@ -48,6 +48,21 @@ const SAMPLE_INTERVAL_MS = 3_000;
 const EMERGENCY_HOLD_MS = 8_000;
 const RECENT_LIMIT = 8;
 
+function MockTrace({ label, unit, samples }: { label: string; unit: string; samples: number[] }) {
+  const min = Math.min(...samples);
+  const span = Math.max(0.01, Math.max(...samples) - min);
+  const points = samples.map((value, i) => `${(i / Math.max(1, samples.length - 1)) * 600},${55 - ((value - min) / span) * 45}`).join(' ');
+  return (
+    <div className="min-w-0 border border-edge p-3">
+      <div className="flex justify-between text-xs font-semibold text-ink"><span>{label}</span><span className="text-ink-muted">{unit} · 64 Hz</span></div>
+      <svg viewBox="0 0 600 65" className="mt-2 h-20 w-full" preserveAspectRatio="none" role="img" aria-label={`Simulated ${label} waveform`}>
+        <line x1="0" y1="32" x2="600" y2="32" stroke="#dad7d1" />
+        <polyline points={points} fill="none" stroke="#34465a" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+      </svg>
+    </div>
+  );
+}
+
 const EXPECTED_POSTURE: Record<TelemetryMode, string> = {
   rest: 'Seated / free float',
   exercise: 'Treadmill / cycle',
@@ -370,6 +385,16 @@ export const DashboardPage: React.FC = () => {
           detail="Operator-selected simulation profile"
         />
       </div>
+
+      <Card>
+        <CardHeader title="Synthetic signal snapshots" subtitle="Two-second EEG and ECG examples generated with each packet. Simulated data, not sensor measurements." />
+        {latest?.waveforms ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            <MockTrace label="EEG · single channel" unit="µV" samples={latest.waveforms.eeg_microvolts} />
+            <MockTrace label="ECG · single lead" unit="mV" samples={latest.waveforms.ecg_millivolts} />
+          </div>
+        ) : <p className="text-xs text-ink-muted">Waiting for the next simulated packet.</p>}
+      </Card>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
         <div className="lg:col-span-2">
