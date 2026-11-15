@@ -46,6 +46,13 @@ export interface TelemetryLog {
   vitals: TelemetryVitals;
   posture: Posture;
   sync_status: SyncStatus;
+  /** Synthetic two-second snapshots; absent on older saved records. */
+  waveforms?: {
+    source: 'simulated';
+    sample_rate_hz: number;
+    eeg_microvolts: number[];
+    ecg_millivolts: number[];
+  };
 }
 
 /** Request body accepted by POST /api/telemetry/sync. */
